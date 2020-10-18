@@ -12,7 +12,7 @@ namespace color
 	{
 		blue, purple, yellow
 	};
-
+	color::colorList getColor(uint32_t firstLetter);
 	string toString(colorList color);
 }
 

@@ -16,6 +16,8 @@ void setX(uint32_t value);
 uint32_t y() const;
 void setY(uint32_t value);
 
+void printInfo() const;
+
 string toString() const;
 
 protected:

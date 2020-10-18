@@ -1,5 +1,7 @@
 #include <iostream>
 #include "circle.h"
+#include <vector>
+#include <algorithm>
 
 using namespace std;
 
@@ -8,9 +10,8 @@ Circle::Circle(const Point & tl, const Point & br, color::colorList cl)
 {
 }
 
-void Circle::printInfo() const
+void Circle::printInfo()
 {
-
 	const uint32_t rx = (_bottonRight.x() - _topLeft.x()) / 2;              // Calculate radius on x axis
 	const uint32_t ry = (_bottonRight.y() - _topLeft.y()) / 2;              // Calculate radius on y axis
 	const Point centerPoint(_topLeft.x() + rx, _topLeft.y() + ry);  // Calculate center point

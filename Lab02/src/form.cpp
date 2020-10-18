@@ -17,6 +17,23 @@ string color::toString(colorList color)
 	return "unknown color";
 }
 
+color::colorList color::getColor(uint32_t firstLetter)
+{
+	switch (firstLetter)
+	{
+	case 'b':
+		return blue;
+		break;
+	case 'p':
+		return purple;
+		break;
+	case 'y':
+		return yellow;
+		break;
+	}
+	return blue; // Default color
+}
+
 Form::Form(const Point & tl, const Point & br, color::colorList cl)
  : _topLeft(tl),
    _bottonRight(br),

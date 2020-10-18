@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <iostream>
 #include <string>
 #include "point.h"
 
@@ -28,6 +29,11 @@ uint32_t Point::y() const
 void Point::setY(uint32_t value)
 {
     _y = value;
+}
+
+void Point::printInfo() const
+{
+	cout << "Poin in x = " << x() << ", y = " << y() << endl;
 }
 
 string Point::toString() const

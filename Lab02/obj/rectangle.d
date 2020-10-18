@@ -135,4 +135,4 @@ obj/rectangle.o: src/rectangle.cpp /usr/include/stdc-predef.h \
  /usr/include/c++/9/bits/basic_ios.tcc \
  /usr/include/c++/9/bits/ostream.tcc /usr/include/c++/9/istream \
  /usr/include/c++/9/bits/istream.tcc inc/rectangle.h inc/form.h \
- inc/point.h
+ inc/point.h inc/figure.h

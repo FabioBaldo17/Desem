@@ -134,4 +134,5 @@ obj/line.o: src/line.cpp /usr/include/stdc-predef.h \
  /usr/include/c++/9/bits/locale_facets.tcc \
  /usr/include/c++/9/bits/basic_ios.tcc \
  /usr/include/c++/9/bits/ostream.tcc /usr/include/c++/9/istream \
- /usr/include/c++/9/bits/istream.tcc inc/line.h inc/form.h inc/point.h
+ /usr/include/c++/9/bits/istream.tcc inc/line.h inc/form.h inc/point.h \
+ inc/figure.h
