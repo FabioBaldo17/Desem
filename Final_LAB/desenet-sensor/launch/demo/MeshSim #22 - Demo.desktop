@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+#Terminal=true
+Name=Desenet-Sensor #22
+Icon=/usr/share/icons/HighContrast/48x48/apps/haguichi.png
+Exec=bash -c "`dirname %k`/desenet-sensor-demo.elf -s22"
+Categories=Application;

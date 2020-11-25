@@ -1,0 +1,7 @@
+<map id="IXFEvent" name="IXFEvent">
+<area shape="rect" id="node2" href="$class_initial_event.html" title="{InitialEvent\n||+ InitialEvent()\l+ ~InitialEvent()\l}" alt="" coords="5,292,137,384"/>
+<area shape="rect" id="node3" href="$class_x_f_event.html" title="{XFEvent\n||+ XFEvent()\l+ ~XFEvent()\l}" alt="" coords="161,292,272,384"/>
+<area shape="rect" id="node4" href="$class_x_f_null_transition.html" title="{XFNullTransition\n||+ XFNullTransition()\l+ ~XFNullTransition()\l}" alt="" coords="297,292,459,384"/>
+<area shape="rect" id="node5" href="$class_x_f_static_event.html" title="{XFStaticEvent\n||+ XFStaticEvent()\l+ ~XFStaticEvent()\l}" alt="" coords="484,292,632,384"/>
+<area shape="rect" id="node6" href="$class_x_f_timeout.html" title="{XFTimeout\n|# _interval\l# _relTicks\l|+ XFTimeout()\l+ ~XFTimeout()\l+ operator==()\l}" alt="" coords="657,277,785,399"/>
+</map>

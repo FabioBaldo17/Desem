@@ -1,0 +1,7 @@
+<map id="XFReactive" name="XFReactive">
+<area shape="rect" id="node2" href="$class_i_x_f_reactive.html" title="{IXFReactive\n||+ IXFReactive()\l+ ~IXFReactive()\l+ startBehavior()\l+ pushEvent()\l+ process()\l}" alt="" coords="5,132,140,268"/>
+<area shape="rect" id="node3" href="$class_i_x_f_event.html" title="{IXFEvent\n|# _eventType\l# _id\l|+ IXFEvent()\l+ ~IXFEvent()\l+ getEventType()\l+ getBehavior()\l+ setBehavior()\l+ getId()\l+ setShouldDelete()\l+ shouldDelete()\l}" alt="" coords="121,331,275,525"/>
+<area shape="rect" id="node4" href="$struct_i_x_f_event_1_1__t_event_status.html" title="{IXFEvent::_tEventStatus\n|+ shouldDelete\l|+ _tEventStatus()\l}" alt="" coords="164,161,341,239"/>
+<area shape="rect" id="node5" href="$class_x_f_thread.html" title="{XFThread\n|# _bExecuting\l|+ XFThread()\l+ ~XFThread()\l+ start()\l+ pushEvent()\l+ scheduleTimeout()\l+ unscheduleTimeout()\l# execute()\l# getTimeoutManager()\l# dispatchEvent()\l}" alt="" coords="317,331,495,525"/>
+<area shape="rect" id="node6" href="$class_x_f_event_queue.html" title="{XFEventQueue\n||+ XFEventQueue()\l+ ~XFEventQueue()\l+ empty()\l}" alt="" coords="365,147,519,253"/>
+</map>

@@ -17,6 +17,7 @@ void ButtonManager::initializeRelations(ToButton * p, BuiltInLed *pled)
 }
 
 int ButtonManager::longPressTimeout = 1000;
+int ButtonManager::blinkTimeout = 500;
 
 ButtonManager & ButtonManager::instance()
 {
@@ -63,6 +64,8 @@ void ButtonManager::released()
 
 EventStatus ButtonManager::processEvent()
 {
+	static int buttonClickNeedLed=0;
+	static int buttonLongClickNeedLed=0;
     // will we handle the event ?
     EventStatus result = EventStatus::Unknown;
     // get the actual event
@@ -113,6 +116,17 @@ EventStatus ButtonManager::processEvent()
                 rootState = STATE_WAIT;
             }
             break;
+        case STATE_LED_TIMER_WAIT:
+        	if (ev->getEventType() == IXFEvent::Timeout &&
+                    getCurrentTimeout()->getId() == tmLedBlink){
+        		if (buttonClickNeedLed){
+        			rootState = STATE_CLICK;
+        		}
+        		if (buttonLongClickNeedLed){
+        			rootState = STATE_LONG;
+        		}
+
+        	}
     }
 
     // the action switch
@@ -133,23 +147,42 @@ EventStatus ButtonManager::processEvent()
                 getThread()->scheduleTimeout(tmLongPressed, longPressTimeout, this);
                 break;
             case STATE_CLICK:
-            	Trace::outln("-- button manager sees a button clicked -- ");
-                /* we must stop the long pressed timeout
-                */
-                getThread()->unscheduleTimeout(tmLongPressed, this);
-                pLed->turnOnLed();
-               // usleep(500000);// sleep for 0.5 s
-                pLed->turnOffLed();
-                // generate a default transition to get out of here
-                GEN(XFNullTransition());
+            	if (buttonClickNeedLed){
+            		buttonClickNeedLed=1;
+
+            		Trace::outln("-- button manager sees a button clicked -- ");
+					/* we must stop the long pressed timeout
+					*/
+					getThread()->unscheduleTimeout(tmLongPressed, this);
+					pLed->turnOnLed();
+					//wait for 500ms
+					getThread()->scheduleTimeout(tmLedBlink, blinkTimeout, this);
+            	}
+				else{
+					buttonClickNeedLed=0;
+					getThread()->unscheduleTimeout(tmLedBlink, this);
+					pLed->turnOffLed();
+					// generate a default transition to get out of here
+					GEN(XFNullTransition());
+					}
                 break;
+            case STATE_LED_TIMER_WAIT:
+            	Trace::outln("-- led blinking -- ");
+				break;
             case STATE_LONG:
-            	Trace::outln("-- button manager sees a long button press -- ");
-            	pLed->turnOnLed();
-			//	sleep(2);// sleep for 0.5 s
-				pLed->turnOffLed();
-                // generate a default transition to get out of here
-                GEN(XFNullTransition());
+            	if (buttonLongClickNeedLed){
+					buttonLongClickNeedLed=1;
+					Trace::outln("-- button manager sees a long button press -- ");
+					pLed->turnOnLed();
+					getThread()->scheduleTimeout(tmLedBlink, blinkTimeout, this);
+            	}
+            	else{
+            		buttonLongClickNeedLed=0;
+            		getThread()->unscheduleTimeout(tmLedBlink, this);
+					pLed->turnOffLed();
+					// generate a default transition to get out of here
+					GEN(XFNullTransition());
+            	}
                 break;
         }
     }

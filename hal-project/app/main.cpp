@@ -4,6 +4,7 @@
 
 int main(int argc, char ** argv)
 {
+	int myButton=0;
 	UNUSED(argc); UNUSED(argv);
 
 	Factory factory;

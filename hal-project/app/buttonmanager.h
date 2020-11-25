@@ -35,10 +35,10 @@ private:
     virtual EventStatus processEvent(); // This is the state machine
 
     enum evID {evPressed, evReleased};		// These are the event ids
-    enum tmID {tmLongPressed};				// This is the timeout id
+    enum tmID {tmLongPressed, tmLedBlink};				// This is the timeout id
     enum smState {STATE_INITIAL, STATE_WAIT, STATE_PRESSED,
-                  STATE_CLICK, STATE_LONG}; // These are the state ids
-    static int longPressTimeout;
+                  STATE_CLICK, STATE_LONG, STATE_LED_TIMER_WAIT}; // These are the state ids
+    static int longPressTimeout, blinkTimeout;
 
     smState rootState;
 
