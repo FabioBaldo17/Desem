@@ -35,7 +35,6 @@ public:
 
 	app::AccelerometerApplication & accelerometerApplication() const;
 	board::Accelerometer & accelerometer() const;
-
 	Net & net() const;
 	Clockwork & clockwork() const;
 	SimpleDisplay & display();

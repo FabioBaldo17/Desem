@@ -23,7 +23,7 @@ class Net;
 /**
  * @brief Implements the desenet protocol on the network layer.
  */
-class NetworkEntity
+class NetworkEntity: public ITimeSlotManager::Observer
 {
 	friend class AbstractApplication;
 	friend class Net;
@@ -57,6 +57,7 @@ protected:
 	 * @brief Called by the lower layer after reception of a new frame
 	 */
 	virtual void onReceive(NetworkInterfaceDriver & driver, const uint32_t receptionTime, const uint8_t * const buffer, size_t length);
+	void onTimeSlotSignal(const ITimeSlotManager & timeSlotManager, const ITimeSlotManager::SIG & signal);
 
 protected:
 	inline ITimeSlotManager & timeSlotManager() const { assert(_pTimeSlotManager); return *_pTimeSlotManager; }	///< Internal access to TimeSlotManager
@@ -67,12 +68,19 @@ protected:
 	typedef std::array<AbstractApplication *, 16> ApplicationPublishersArray;
 	typedef std::list<EventElement> EventElementList;
 
+// XXX added
+protected:
+	void subscribeApps(AbstractApplication *new_app);
+	void syncApps(NetworkTime time);
+	void getDataApps(SvGroupMask svMask);
+
 protected:
 	static NetworkEntity * _pInstance;				///< Pointer to single instance.
 	ITimeSlotManager * _pTimeSlotManager;			///< Pointer to TimeSlotManager.
 	NetworkInterfaceDriver * _pTransceiver;			///< Pointer to transceiver.
 
 	// TODO: Add needed attributes here
+	ApplicationSyncList syncList; // This list must be updated at the beginning
 };
 
 } // sensor

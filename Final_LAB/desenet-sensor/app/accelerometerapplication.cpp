@@ -75,9 +75,8 @@ EventStatus AccelerometerApplication::processEvent()
 			getCurrentEvent()->getId() == EV_SV_SYNC_id)
 		{
 			newState = STATE_ROOT;	// Stay in state
-
 			// Read actual values from accelerometer
-//			_readAccelerometerValues();
+			//			_readAccelerometerValues();
 // Reading accelerometer values in the state machine takes the values too late.
 // This part of the state machine is NOT executed between beacon reception and svPublishIndication(). It
 // is called AFTER the svPublishIndication() and hence too late. Values are transfered on network interval

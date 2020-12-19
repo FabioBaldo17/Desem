@@ -24,7 +24,6 @@ public:
 
 	void initialize(const desenet::SlotNumber & slotNumber);	///< Initialises the object.
 	void start();												///< Starts the network and its components.
-
 	static Net & instance();									///< Reference to single net instance.
 	inline NetworkEntity & entity() { return _networkEntity; }	///< Reference to network entity.
 

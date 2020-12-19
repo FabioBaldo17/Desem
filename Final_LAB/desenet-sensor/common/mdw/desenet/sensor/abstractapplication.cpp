@@ -13,11 +13,18 @@ using desenet::sensor::AbstractApplication;
 void AbstractApplication::svSyncRequest()
 {
 	// TODO: Register application using the network entity
+	// use a function in of the NetworkEntity for adding this application
+	//XXX IS it good?
+	NetworkEntity::instance().subscribeApps(this);
+
 }
 
 bool AbstractApplication::svPublishRequest(SvGroup group)
 {
 	// TODO: Register application for the provided group using the network entity
+	//add_to_list
+
+
 	return false;
 }
 
@@ -28,9 +35,11 @@ void AbstractApplication::evPublishRequest(EvId id, const SharedByteBuffer & evD
 
 /**
  * Default callback method for syncs
+ * In this method all sampled values applications need to be synched with the network time
  */
-void AbstractApplication::svSyncIndication(desenet::NetworkTime)
+void AbstractApplication::svSyncIndication(desenet::NetworkTime time)
 {
+	// This function is defined in the app
 }
 
 /**
@@ -40,3 +49,4 @@ SharedByteBuffer::sizeType AbstractApplication::svPublishIndication(SvGroup, Sha
 {
 	return 0;
 }
+

@@ -66,9 +66,10 @@ namespace desenet {
          */
         void setCycleInterval(uint32_t interval);
 
-        desenet::SlotDuration slotDuration();
+
         void setSlotDuration(desenet::SlotDuration slotDuration);
 
+        desenet::SlotDuration slotDuration();
         /**
          * @brief Returns the sampled values group mask.
          *
