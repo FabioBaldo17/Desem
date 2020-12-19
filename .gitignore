@@ -25,3 +25,7 @@ common/platform/olimex-stm32f103-stk/*
 DeSeNetLaboratory/
 
 
+
+*.d
+
+*.o
