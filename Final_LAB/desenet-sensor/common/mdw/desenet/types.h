@@ -4,15 +4,17 @@
 #include "containers/SharedByteBuffer"
 #include "address.hpp"
 
-namespace desenet {
+
 
 const uint8_t ADDRESS_SIZE = 4;
 
+namespace desenet {
 /**
  * @brief Shared buffer in order to pass data around the stack without the need to copy it and still have memory returned
  *        in the moment the last user releases the object.
  */
-typedef ::hei::SharedByteBuffer SharedByteBuffer;
+//typedef hei::SharedByteBuffer SharedByteBuffer;
+typedef hei::SharedByteBuffer SharedByteBuffer;
 
 /**
  * @brief Identifies a single sampled values group. Valid values are from 0 to 15.

@@ -14,23 +14,22 @@ void AbstractApplication::svSyncRequest()
 {
 	// TODO: Register application using the network entity
 	// use a function in of the NetworkEntity for adding this application
-	//XXX IS it good?
 	NetworkEntity::instance().subscribeApps(this);
-
 }
 
 bool AbstractApplication::svPublishRequest(SvGroup group)
 {
 	// TODO: Register application for the provided group using the network entity
 	//add_to_list
-
-
-	return false;
+	NetworkEntity::instance().addToPublisherList(group,this);
+	return true;
 }
 
 void AbstractApplication::evPublishRequest(EvId id, const SharedByteBuffer & evData)
 {
 	// TODO: Publish event data
+	NetworkEntity::EventElement newEventElement(id, evData);
+	NetworkEntity::instance().addToEventElementList(newEventElement);
 }
 
 /**

@@ -11,6 +11,7 @@
 #include "factory.h"
 #include "board/ledcontroller.h"
 #include "networkentity.h"
+#include "MultiPDU.h"
 
 using std::array;
 using std::list;
@@ -76,17 +77,16 @@ void NetworkEntity::onReceive(NetworkInterfaceDriver & driver, const uint32_t re
 	if (frame.type() == FrameType::Beacon) {
 		Beacon b(frame);
 		Factory::instance().ledController().flashLed(0); // Blink led when beacon is detected
-		// Start a timer for calculating the time need for sending back the response to the beacon
+		// 1. Start a timer for calculating the time need for sending back the response to the beacon
 		_pTimeSlotManager->onBeaconReceived(b.slotDuration());
 
-		//Synchronize all applications using the svSyncIndications(b.networkTime()) for each application
-		syncApps(b.networkTime()); // This method perform a svSyncIndication for each
+		//2. Synchronize all subscrbed application using the svSyncIndications(b.networkTime()) for each application
+		syncApps(b.networkTime()); // This method perform a svSyncIndication for each subsscribed application
 
-		// Ask for data (data and events) to all application giving the svMask
+		//3. Save the SVMask
+		svMask=b.svGroupMask();
 
-
-		//  When the timer elapses the function NetworkEntity::onTimeSlotSignal is called
-		// Inside this function the received data are send to the GW
+		//  When the slot-timer elapses the function NetworkEntity::onTimeSlotSignal is called
 
 	} else {
 		// This is the case of MDUs but we are not controllers.
@@ -97,33 +97,50 @@ void NetworkEntity::onReceive(NetworkInterfaceDriver & driver, const uint32_t re
 void NetworkEntity::onTimeSlotSignal(const ITimeSlotManager & timeSlotManager, const ITimeSlotManager::SIG & signal){
 	// Send the MPDUs back to the GW
 
+	MultiPDU MPDU;
+	SharedByteBuffer mySharedBuffer;
+
+	// Add to the MPDU all the SVePDU possibles
+	for (size_t i = 0; i < svMask.size(); i++){
+		if (svMask.test(i)){
+			_publisherList[i]->svPublishIndication(i, mySharedBuffer ); // TODO understand the SVGroup
+			SharedByteBuffer sB = MPDU.buildSVePDU(i, mySharedBuffer);  // <-/
+			if (MPDU.addePDU( sB) == false ) break;
+		}
+	}
+
+	// Add to the MPDU all the EVePDU possibles
+	for (size_t i = 0; i < _eventElementList.size(); i++){
+		SharedByteBuffer sB = MPDU.buildEVePDU( _eventElementList.front().id , _eventElementList.front().data );
+		if (MPDU.addePDU( sB) == false ) break;
+	}
+
+	// Send the MPDU to the GW using the radio
+	_pInstance->transceiver().transmit(MPDU.getFinalMPDU(), MPDU.length());
+
 }
 
 void NetworkEntity::subscribeApps(AbstractApplication *new_app){
 	// add the app to the list of app to be synchronized
-	syncList.push_back(new_app);
+	_syncList.push_back(new_app);
 }
 
 void NetworkEntity::syncApps(NetworkTime time){
 
 	ApplicationSyncList::iterator appSyncList_it;
-		for (appSyncList_it=syncList.begin();
-				appSyncList_it!=syncList.end(); ++appSyncList_it){
+		for (appSyncList_it=_syncList.begin();
+				appSyncList_it!=_syncList.end(); ++appSyncList_it){
 			(*(appSyncList_it))->svSyncIndication(time);
 		}
 }
 
-void NetworkEntity::getDataApps(SvGroupMask svMask){
 
-	// For each app registered ask launch a request with the corresponding group
-	ApplicationSyncList::iterator appSyncList_it;
-	for (appSyncList_it=syncList.begin();
-			appSyncList_it!=syncList.end(); ++appSyncList_it){
-		for (int svGroup = 0; svGroup < 16; ++svGroup) {
-			if (svMask.test(svGroup)) (*(appSyncList_it))->svPublishRequest(svGroup);
+bool NetworkEntity::addToPublisherList(SvGroup group, AbstractApplication *abstractApplication){
+		AbstractApplication *_abstractApplication = _publisherList.at(group);
+		if (_abstractApplication == nullptr) {
+			_abstractApplication = abstractApplication;
+			return true;
 		}
-
+		return false;
 	}
-}
 
-// XXX TimeSlotManager interface must be defined

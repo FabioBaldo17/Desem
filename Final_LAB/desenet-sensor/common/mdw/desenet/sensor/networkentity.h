@@ -73,6 +73,10 @@ protected:
 	void subscribeApps(AbstractApplication *new_app);
 	void syncApps(NetworkTime time);
 	void getDataApps(SvGroupMask svMask);
+	bool addToPublisherList(SvGroup group, AbstractApplication *abstractApplication);
+    void addToEventElementList(EventElement eventElement){
+    	_eventElementList.push_back(eventElement);
+    }
 
 protected:
 	static NetworkEntity * _pInstance;				///< Pointer to single instance.
@@ -80,7 +84,10 @@ protected:
 	NetworkInterfaceDriver * _pTransceiver;			///< Pointer to transceiver.
 
 	// TODO: Add needed attributes here
-	ApplicationSyncList syncList; // This list must be updated at the beginning
+	SvGroupMask svMask;
+	ApplicationSyncList _syncList; // This list must be updated at the beginning
+	ApplicationPublishersArray _publisherList; // This list contains the Applications to be called for publishing their SV
+	EventElementList _eventElementList; // This list contains the Event ID and relative data to be published in the MPDU
 };
 
 } // sensor
