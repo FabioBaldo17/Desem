@@ -51,6 +51,11 @@ desenet::SharedByteBuffer::sizeType AccelerometerApplication::svPublishIndicatio
 		memcpy(&svData[0], &_accelValuesSyncArray[0], 2);
 		memcpy(&svData[2], &_accelValuesSyncArray[1], 2);
 		memcpy(&svData[4], &_accelValuesSyncArray[2], 2);
+//		int16_t my_demo_values=0x1111;
+//		svData[0] = my_demo_values;
+//		svData[2] = my_demo_values;
+//		svData[4] = my_demo_values;
+
 
 		return sizeof(_accelValuesSyncArray);
 	}

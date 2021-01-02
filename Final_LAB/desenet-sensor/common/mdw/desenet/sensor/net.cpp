@@ -24,8 +24,9 @@ void Net::initialize(const desenet::SlotNumber & slotNumber)
 {
 	char sensorName[16];
 	
-	_networkEntity.initialize();
+	_networkEntity.initialize(slotNumber);
 	_timeSlotManager.initialize(slotNumber);
+	_timeSlotManager.initializeRelations(_networkEntity);
 
 	snprintf(sensorName, 16, "Sensor %d", slotNumber);
 
@@ -33,6 +34,7 @@ void Net::initialize(const desenet::SlotNumber & slotNumber)
 	_pNetworkInterfaceDriver->initialize();
 
 	_networkEntity.initializeRelations(_timeSlotManager, *_pNetworkInterfaceDriver);
+	// XXX added by me
 }
 
 void Net::start()

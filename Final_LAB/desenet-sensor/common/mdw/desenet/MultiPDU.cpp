@@ -21,8 +21,6 @@ using std::memset;
 using std::bitset;
 
 
-// TODO add the basic constructor
-
 /* In the creation of the MPDU the class should set:
  * Frametype to Frametype = MPDU
  * SensorID to
@@ -32,13 +30,13 @@ desenet::MultiPDU::MultiPDU()
 {
 	// Set the type for the MPDU
 	Frame::setType(FrameType::MPDU);
-	memset(buffer() + Frame::HEADER_SIZE, 0, 1);	// Set first field in payload to zero
 }
 
 desenet::MultiPDU::MultiPDU(const Frame & frame)
 	: Frame(frame)
 {
 }
+
 
 
 

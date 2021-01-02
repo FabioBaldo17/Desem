@@ -32,7 +32,7 @@ public:
 	NetworkEntity();
 	virtual ~NetworkEntity();
 
-	void initialize();																						///< Initializes the instance.
+	void initialize(const SlotNumber & slotNumber);																						///< Initializes the instance.
 	void initializeRelations(ITimeSlotManager & timeSlotManager, NetworkInterfaceDriver & transceiver);		///< Initializes all relations needed by the instance.
 
 	static NetworkEntity & instance();																		///< Returns reference to single instance.
@@ -57,7 +57,7 @@ protected:
 	 * @brief Called by the lower layer after reception of a new frame
 	 */
 	virtual void onReceive(NetworkInterfaceDriver & driver, const uint32_t receptionTime, const uint8_t * const buffer, size_t length);
-	void onTimeSlotSignal(const ITimeSlotManager & timeSlotManager, const ITimeSlotManager::SIG & signal);
+	virtual void onTimeSlotSignal(const ITimeSlotManager & timeSlotManager, const ITimeSlotManager::SIG & signal);
 
 protected:
 	inline ITimeSlotManager & timeSlotManager() const { assert(_pTimeSlotManager); return *_pTimeSlotManager; }	///< Internal access to TimeSlotManager
@@ -84,10 +84,13 @@ protected:
 	NetworkInterfaceDriver * _pTransceiver;			///< Pointer to transceiver.
 
 	// TODO: Add needed attributes here
+	SlotNumber _slotNumber;
+	Address GWaddress;
 	SvGroupMask svMask;
 	ApplicationSyncList _syncList; // This list must be updated at the beginning
 	ApplicationPublishersArray _publisherList; // This list contains the Applications to be called for publishing their SV
 	EventElementList _eventElementList; // This list contains the Event ID and relative data to be published in the MPDU
+
 };
 
 } // sensor

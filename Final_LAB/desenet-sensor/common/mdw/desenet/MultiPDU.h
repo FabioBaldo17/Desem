@@ -36,32 +36,33 @@ public:
 	MultiPDU( );
 	MultiPDU(const Frame & frame);
 
-    SharedByteBuffer buildSVePDU(SvGroup svGroup, SharedByteBuffer &svData){
+	void setDestinationAddr(Address GWAddr){
+		Frame::setDestination(GWAddr);
+	}
+	void setSlotNumber(const SlotNumber &slotNumber){
+		// Write in MPDU frame the value of the slot without touching the frametype
+		*(Frame::buffer() + Frame::HEADER_SIZE) = (slotNumber | 0x80);
+	}
+	void setePDUCount(){
+		// Write in the MPDU frame the ePDU count
+		memcpy(Frame::buffer() + Frame::HEADER_SIZE + 1, &ePDUCount, 1);
+	}
+
+
+    bool addePDU(SvGroup svGroup, SharedByteBuffer &svData){
+
     	SharedByteBuffer mySVePDU(1+svData.size()); // create new container with the appropriate size
-    	// ePDU_type (1 bit); SV_Group (4 bits); Length (3 bits); Data (length bits)
-    	uint8_t ePDU_head=0x0 + ((svGroup && 0x15)<<3) + (svData.size() && 0x7);
-    	memcpy(mySVePDU.data(), &ePDU_head, sizeof(ePDU_head));
-    	memcpy(mySVePDU.data()+1, &svGroup, svData.size());
-    	return mySVePDU;
-    }
+		// ePDU_type (1 bit); SV_Group (4 bits); Length (3 bits); Data (length bits)
+		uint8_t ePDU_head=0x0 + ((svGroup && 0x15)<<3) + (svData.size() && 0x7);
+		memcpy(mySVePDU.data(), &ePDU_head, sizeof(ePDU_head));
+		memcpy(mySVePDU.data()+1, &svGroup, svData.size());
 
-    SharedByteBuffer buildEVePDU(EvId id, const SharedByteBuffer & evData){
-    	SharedByteBuffer myEVePDU(1+evData.size());
-    	// ePDU_type (1 bit); EvId (4 bits); Length (3 bits); Data (length bits)
-		uint8_t ePDU_head=0x1 + ((id && 0x15)<<3) + (evData.size() && 0x7);
-		memcpy(myEVePDU.data(), &ePDU_head, sizeof(ePDU_head));
-		memcpy(myEVePDU.data()+1, &evData, evData.size());
-		return myEVePDU;
-    }
-
-
-    bool addePDU(SharedByteBuffer &ePDU){
     	SharedByteBuffer ib = SharedByteBuffer::proxy(insertionPointAddress + 1, remainingLength-1 );
-    	size_t nbrBytes = ePDU.size();
+    	size_t nbrBytes = mySVePDU.size();
     	if (nbrBytes <= remainingLength && nbrBytes > 0) {
     		MPDUtotalSize+=nbrBytes;
     		// Add the ePDU to the structure
-    		memcpy(insertionPointAddress , ePDU.data(), ePDU.size() );	// Set first field in payload to zero
+    		memcpy(insertionPointAddress ,  mySVePDU.data(),  mySVePDU.size() );	// Set first field in payload to zero
     		insertionPointAddress+=nbrBytes;
     		remainingLength-=nbrBytes;
     		ePDUCount++;
@@ -69,11 +70,33 @@ public:
     	}
     	return false;
     }
+
+    bool addePDU(EvId id, const SharedByteBuffer & evData){
+    	SharedByteBuffer myEVePDU(1+evData.size());
+		// ePDU_type (1 bit); EvId (4 bits); Length (3 bits); Data (length bits)
+		uint8_t ePDU_head=0x1 + ((id && 0x15)<<3) + (evData.size() && 0x7);
+		memcpy(myEVePDU.data(), &ePDU_head, sizeof(ePDU_head));
+		memcpy(myEVePDU.data()+1, &evData, evData.size());
+
+		SharedByteBuffer ib = SharedByteBuffer::proxy(insertionPointAddress + 1, remainingLength-1 );
+		size_t nbrBytes = myEVePDU.size();
+		if (nbrBytes <= remainingLength && nbrBytes > 0) {
+			MPDUtotalSize+=nbrBytes;
+			// Add the ePDU to the structure
+			memcpy(insertionPointAddress , myEVePDU.data(), myEVePDU.size() );	// Set first field in payload to zero
+			insertionPointAddress+=nbrBytes;
+			remainingLength-=nbrBytes;
+			ePDUCount++;
+			return true;
+		}
+		return false;
+   }
+
+
     uint8_t *getFinalMPDU(){
     	return Frame::buffer();
     }
 private:
-
     int ePDUCount = 0; // Number of ePDU already inside the SharedBuffer
     int MPDUtotalSize= 0;
     size_t remainingLength = Frame::Mtu - Frame::HEADER_SIZE - Frame::reservedLength();
