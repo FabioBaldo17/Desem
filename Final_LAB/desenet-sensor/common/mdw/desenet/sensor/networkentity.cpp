@@ -98,27 +98,30 @@ void NetworkEntity::onReceive(NetworkInterfaceDriver & driver, const uint32_t re
 
 // TODO: Add missing class method implementations here
 void NetworkEntity::onTimeSlotSignal(const ITimeSlotManager & timeSlotManager, const ITimeSlotManager::SIG & signal){
-	Factory::instance().ledController().flashLed(0); // Blink led when MPDU is send back to the GW
-	// Send the MPDUs back to the GW
-	MultiPDU MPDU;
-	MPDU.setDestinationAddr(GATEWAY_ADDRESS);
-	MPDU.setSlotNumber(_slotNumber);
-	// Add to the MPDU all the SVePDU possibles
-	for (size_t i = 0; i < svMask.size(); i++){
-		if (svMask.test(i) && _publisherList[i] != nullptr){
-			SharedByteBuffer mySharedBuffer(MPDU.Mtu);
-			_publisherList[i]->svPublishIndication(i, mySharedBuffer);
-			if (MPDU.addePDU(i, mySharedBuffer) == false ) break;
+	if(signal == ITimeSlotManager::OWN_SLOT_START){
+		Factory::instance().ledController().flashLed(0); // Blink led when MPDU is send back to the GW
+		// Send the MPDUs back to the GW
+		MultiPDU MPDU;
+		MPDU.setDestinationAddr(GATEWAY_ADDRESS);
+		MPDU.setSlotNumber(_slotNumber);
+		// Add to the MPDU all the SVePDU possibles
+		for (size_t i = 0; i < svMask.size(); i++){
+			if (svMask.test(i) && _publisherList[i] != nullptr){
+				SharedByteBuffer mySharedBuffer(6);
+				_publisherList[i]->svPublishIndication(i, mySharedBuffer);
+				if (MPDU.addePDU(i, mySharedBuffer) == false ) break;
+			}
 		}
-	}
 
-	// Add to the MPDU all the EVePDU possibles
-	for (size_t i = 0; i < _eventElementList.size(); i++){
-		if (MPDU.addePDU( _eventElementList.front().id , _eventElementList.front().data) == false ) break;
+		// Add to the MPDU all the EVePDU possibles
+		for (size_t i = 0; i < _eventElementList.size(); i++){
+			if (MPDU.addePDU( _eventElementList.front().id , _eventElementList.front().data) == false ) break;
+		}
+		MPDU.setePDUCount();
+		// Send the MPDU to the GW using the radio
+		size_t _length=MPDU.size();
+		_pTransceiver->transmit(MPDU.getFinalMPDU(), _length);
 	}
-	MPDU.setePDUCount();
-	// Send the MPDU to the GW using the radio
-	_pTransceiver->transmit(MPDU.getFinalMPDU(), MPDU.length());
 }
 
 void NetworkEntity::subscribeApps(AbstractApplication *new_app){

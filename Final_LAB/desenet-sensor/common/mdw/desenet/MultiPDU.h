@@ -53,9 +53,9 @@ public:
 
     	SharedByteBuffer mySVePDU(1+svData.size()); // create new container with the appropriate size
 		// ePDU_type (1 bit); SV_Group (4 bits); Length (3 bits); Data (length bits)
-		uint8_t ePDU_head=0x0 + ((svGroup && 0x15)<<3) + (svData.size() && 0x7);
+		uint8_t ePDU_head=0x80 | ((svGroup & 0x0F )<< 3) | (svData.size() & 0x7);
 		memcpy(mySVePDU.data(), &ePDU_head, sizeof(ePDU_head));
-		memcpy(mySVePDU.data()+1, &svGroup, svData.size());
+		memcpy(mySVePDU.data()+1, &svData, svData.size());
 
     	SharedByteBuffer ib = SharedByteBuffer::proxy(insertionPointAddress + 1, remainingLength-1 );
     	size_t nbrBytes = mySVePDU.size();
@@ -74,7 +74,7 @@ public:
     bool addePDU(EvId id, const SharedByteBuffer & evData){
     	SharedByteBuffer myEVePDU(1+evData.size());
 		// ePDU_type (1 bit); EvId (4 bits); Length (3 bits); Data (length bits)
-		uint8_t ePDU_head=0x1 + ((id && 0x15)<<3) + (evData.size() && 0x7);
+		uint8_t ePDU_head=0x80 | ((id & 0x0F)<<3) | (evData.size() & 0x7);
 		memcpy(myEVePDU.data(), &ePDU_head, sizeof(ePDU_head));
 		memcpy(myEVePDU.data()+1, &evData, evData.size());
 
@@ -96,11 +96,14 @@ public:
     uint8_t *getFinalMPDU(){
     	return Frame::buffer();
     }
+    size_t size(){
+    	return MPDUtotalSize+Frame::reservedLength();
+    }
 private:
-    int ePDUCount = 0; // Number of ePDU already inside the SharedBuffer
+    uint8_t ePDUCount = 0; // Number of ePDU already inside the SharedBuffer
     int MPDUtotalSize= 0;
-    size_t remainingLength = Frame::Mtu - Frame::HEADER_SIZE - Frame::reservedLength();
-    unsigned char *insertionPointAddress = Frame::buffer() + Frame::HEADER_SIZE + 7 + 1 + 1 ;
+    size_t remainingLength = Frame::Mtu - Frame::HEADER_SIZE -1;
+    unsigned char *insertionPointAddress = Frame::buffer() + Frame::HEADER_SIZE + Frame::reservedLength();
 };
 
 } /* namespace desenet */
