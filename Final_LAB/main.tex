@@ -1,0 +1,118 @@
+\documentclass[12pt,dvipsnames]{article}
+
+% Packages
+%---------------------------------------------------------------------------------------------------
+\usepackage[english]{babel}
+\usepackage[svgnames]{xcolor}
+\usepackage{natbib}
+\usepackage{url}
+\usepackage[utf8x]{inputenc}
+\usepackage{amsmath}
+\usepackage{verbatim}
+\usepackage{graphicx}
+\usepackage{parskip}
+\usepackage{hyperref}
+\usepackage{fancyhdr}
+\usepackage{listings}
+\usepackage{vmargin}
+\setmarginsrb{2 cm}{1.5 cm}{2 cm}{1.5 cm}{1 cm}{1 cm}{1.5 cm}{1.5 cm}
+\usepackage{minted}
+\usepackage{hyperref}
+\usepackage{float}
+\usepackage{etoolbox}
+\usepackage{tcolorbox}
+\usepackage[
+labelfont=sf,
+hypcap=false,
+format=hang,
+width=\columnwidth
+]{caption}
+
+%Colors
+%---------------------------------------------------------------------------------------------------
+\definecolor{bg}{rgb}{0.95,0.95,0.95}
+%---------------------------------------------------------------------------------------------------
+
+% New commands
+%---------------------------------------------------------------------------------------------------
+\makeatletter
+\patchcmd{\verbatim@input}{\@verbatim}{\scriptsize\@verbatim}{}{}
+\makeatother
+
+% Highlight some code
+\newcommand{\Lcode}[1]{\texttt{\color{Blue}{#1}}}
+
+% Shell command highlighting
+\newcommand{\scom}[1]{
+\vspace{0.2cm}
+\begin{tcolorbox}
+    \texttt{\color{Blue}{\$ #1}}
+\end{tcolorbox}
+}
+% Multiple shell command highlighting
+\newcommand{\mscom}[1]{
+\vspace{0.2cm}
+\begin{tcolorbox}
+    \texttt{\color{Blue}{#1}}
+\end{tcolorbox}
+}
+% Reference to code lines write only the line number
+\newcommand{\refcode}[1]{\underline{line #1}}
+
+% Caption for long listing (can be used also for short listing)
+\newcommand{\Caption}[1]{\captionof{listing}{#1}}
+%---------------------------------------------------------------------------------------------------
+
+
+%Definition of image path
+%---------------------------------------------------------------------------------------------------
+\graphicspath{{images/}}
+%---------------------------------------------------------------------------------------------------
+
+
+% Linking and reference style
+%---------------------------------------------------------------------------------------------------
+\hypersetup{
+  colorlinks=true,
+  linkcolor=SteelBlue,
+  filecolor=IndianRed,
+  urlcolor=IndianRed,
+  citecolor=LightSlateGray,
+  raiselinks=true
+}
+
+% Listing style
+%---------------------------------------------------------------------------------------------------
+\usemintedstyle{perldoc}
+\setminted{
+frame=lines,
+bgcolor=bg,
+fontsize=\footnotesize,
+baselinestretch=1,
+framesep=1mm,
+linenos,
+breaklines,
+tabsize=1
+}
+%---------------------------------------------------------------------------------------------------
+
+
+
+
+\begin{document}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\input{title_page.tex}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\tableofcontents
+
+%\renewcommand\listoflistingscaption{List of source codes}
+%\listoflistings
+\newpage
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\input{diagrams_tests.tex}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\end{document}

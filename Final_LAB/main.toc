@@ -1,0 +1,8 @@
+\babel@toc {english}{}
+\contentsline {section}{\numberline {1}Diagrams}{2}{section.1}%
+\contentsline {subsection}{\numberline {1.1}DeseNET protocol documentation}{2}{subsection.1.1}%
+\contentsline {subsection}{\numberline {1.2}Joystick application documentation}{6}{subsection.1.2}%
+\contentsline {section}{\numberline {2}Tests}{6}{section.2}%
+\contentsline {subsection}{\numberline {2.1}DeseNET protocol test}{6}{subsection.2.1}%
+\contentsline {subsection}{\numberline {2.2}Joystick application test}{6}{subsection.2.2}%
+\contentsline {subsection}{\numberline {2.3}Results}{7}{subsection.2.3}%

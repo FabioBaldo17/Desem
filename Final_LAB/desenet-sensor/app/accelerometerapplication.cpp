@@ -51,7 +51,7 @@ desenet::SharedByteBuffer::sizeType AccelerometerApplication::svPublishIndicatio
 		memcpy(&svData[0], &_accelValuesSyncArray[0], 2);
 		memcpy(&svData[2], &_accelValuesSyncArray[1], 2);
 		memcpy(&svData[4], &_accelValuesSyncArray[2], 2);
-
+		Trace::outln("AcceApplication data send: %02X%02X%02X%02X%02X%02X", svData[0],svData[1],svData[2],svData[3],svData[4],svData[5]);
 		return sizeof(_accelValuesSyncArray);
 	}
 	return 0;
@@ -106,6 +106,6 @@ board::Accelerometer & AccelerometerApplication::accelerometer()
 void AccelerometerApplication::_readAccelerometerValues()
 {
 	accelerometer().getAccelerationValues(_accelValuesSyncArray[0],	/* x */
-										  _accelValuesSyncArray[1],	/* x */
+										  _accelValuesSyncArray[1],	/* y */
 										  _accelValuesSyncArray[2]	/* z */);
 }

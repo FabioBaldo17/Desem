@@ -6,16 +6,19 @@
 CPP_SRCS += \
 ../app/accelerometerapplication.cpp \
 ../app/factory.cpp \
+../app/joystickapplication.cpp \
 ../app/main.cpp 
 
 OBJS += \
 ./app/accelerometerapplication.o \
 ./app/factory.o \
+./app/joystickapplication.o \
 ./app/main.o 
 
 CPP_DEPS += \
 ./app/accelerometerapplication.d \
 ./app/factory.d \
+./app/joystickapplication.d \
 ./app/main.d 
 
 

@@ -35,7 +35,7 @@ bool Joystick::initialize()
 		_initAdc();
 
 		// Start state machine
-		startBehavior();
+		//startBehavior();
 
 		return true;
 	}

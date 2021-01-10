@@ -67,10 +67,11 @@ void Factory::buildApplication()
 
 	// Initialize applications
 	accelerometerApplication().initialize();
+	joystickApplication().initialize();
+	joystick().initialize();
 
-	//
 	// Initialize relations
-	//
+	joystick().setObserver(&joystickApplication());
 
 	// Draw Title on display
 	display().clear();
@@ -85,6 +86,7 @@ void Factory::buildApplication()
 	clockwork().start();
 	net().start();
 	accelerometerApplication().start();
+	joystick().start();
 }
 
 #ifdef TC_MESHSIM
@@ -95,6 +97,17 @@ MeshSimBoard & Factory::meshSimBoard() const
 	return msb;
 }
 #endif // TC_MESHSIM
+
+app::JoysticApplication & Factory::joystickApplication() const
+{
+	static app::JoysticApplication joystickApp;
+	return joystickApp;
+}
+
+Joystick & Factory::joystick() const{
+
+	return Joystick::instance();
+}
 
 app::AccelerometerApplication & Factory::accelerometerApplication() const
 {

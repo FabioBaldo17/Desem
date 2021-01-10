@@ -25,12 +25,13 @@ using std::bitset;
  * Frametype to Frametype = MPDU
  * SensorID to
  */
-desenet::MultiPDU::MultiPDU()
-	: Frame(MINIMUM_FRAME_LENGTH)
-{
-	// Set the type for the MPDU
-	Frame::setType(FrameType::MPDU);
-}
+//desenet::MultiPDU::MultiPDU()
+//	: Frame(Frame::Mtu)
+//{
+//	Frame::setLength(7);
+//	// Set the type for the MPDU
+//	Frame::setType(FrameType::MPDU);
+//}
 
 desenet::MultiPDU::MultiPDU(const Frame & frame)
 	: Frame(frame)

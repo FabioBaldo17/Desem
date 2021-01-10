@@ -4,8 +4,8 @@
 #include "xf/xfreactive.h"
 #include "interfaces/ijoystick.h"
 
-class MeshSimBoard;
 
+class MeshSimBoard;
 /**
  * @brief Joystick representing the 4 way joystick with push button on the Olimex STM-103STK board.
  *
@@ -35,3 +35,4 @@ protected:
 	IJoystickObserver * _pObserver;
 
 };
+

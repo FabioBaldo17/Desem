@@ -26,6 +26,9 @@ public:
 	class Observer
 	{
 	public:
+		Observer(){
+
+		};
 		/**
 		 * @brief Method called on the observer to notify new signal.
 		 *

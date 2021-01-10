@@ -34,7 +34,7 @@ void Net::initialize(const desenet::SlotNumber & slotNumber)
 	_pNetworkInterfaceDriver->initialize();
 
 	_networkEntity.initializeRelations(_timeSlotManager, *_pNetworkInterfaceDriver);
-	// XXX added by me
+	Trace::outln("Net initialize: %p", _networkEntity);
 }
 
 void Net::start()
